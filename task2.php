@@ -62,7 +62,7 @@ function getPartsFromFullname($fullname) {
 
 // Функция формирования сокращенного имени
 function getShortName($name, $surname){
- return "{$name} {$surname[0]}.";
+ return "{$name}" . " " . mb_substr($surname, 0, 1) . ".";
 };
 
 //Перебираем массив

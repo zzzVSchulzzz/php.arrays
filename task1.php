@@ -47,8 +47,8 @@ $example_persons_array = [
 ];
 
 // Функция сбора имени из разрозненных частей
-function getFullnameFromParts($surname, $name, $patronomyc) {
-	return "{$surname} {$name} {$patronomyc}";
+function getFullnameFromParts($surname, $name, $patronymic) {
+	return "{$surname} {$name} {$patronymic}";
 }
 
 //Функция разрозненного представления имени в рамках массива
@@ -59,7 +59,7 @@ function getPartsFromFullname($fullname) {
 	return [
 		'surname' => $parts[0],
 		'name' => $parts[1],
-		'patronomyc' => $parts[2]
+		'patronymic' => $parts[2]
 	];
 }
 
@@ -74,7 +74,7 @@ foreach($example_persons_array as $person) {
 	print_r($parts);
 	
 	//Собираем имя обратно
-	$reconstructedFullname = getFullnameFromParts($parts['surname'], $parts['name'], $parts['patronomyc']);
+	$reconstructedFullname = getFullnameFromParts($parts['surname'], $parts['name'], $parts['patronymic']);
     echo "Собранное полное имя: $reconstructedFullname\n\n"; 
 		
 };

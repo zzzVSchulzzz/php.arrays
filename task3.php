@@ -86,7 +86,7 @@ function getGenderFromName($fullname){
 		$genderScore++;
 	}
 	
-	if (mb_substr($parts['name'], -1) === "й" || mb_substr($parts['name'], -1) === "н"){
+	if (mb_substr($parts['name'], -1) <=> "й" || mb_substr($parts['name'], -1) <=> "н"){
 		$genderScore++;
 	}
 	

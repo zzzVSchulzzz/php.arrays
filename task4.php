@@ -140,6 +140,7 @@ function getGenderDescription($persons) {
     ];
 };
 	$genderDistribution = getGenderDescription($example_persons_array);
+	echo "Гендерный состав аудитории:\n";
 	echo "\n Количество мужчин: {$genderDistribution['мужчины']} ({$genderDistribution['мужские_доля']}%)\n ";
 	echo "Количество женщин: {$genderDistribution['женщины']} ({$genderDistribution['женские_доля']}%)\n ";
 	echo "Количество с неопределенным полом: {$genderDistribution['неопределенный']} ({$genderDistribution['неопределенные_доля']}%)\n ";

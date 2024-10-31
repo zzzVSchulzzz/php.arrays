@@ -113,7 +113,7 @@ function getGenderFromName($fullname){
 	
 	if (mb_substr($parts['name'], -1) === "а" || mb_substr($parts['name'], -1) === "я"){
 		$genderScore--;
-	}
+	} //я добавила в проверку окончание на "я" для Юлии
 	
 	if (mb_substr($parts['surname'], -2) === "ва"){
 		$genderScore--;
@@ -206,23 +206,30 @@ function getGenderDescription($persons) {
 	echo "Количество женщин: {$genderDistribution['женщины']} ({$genderDistribution['женские_доля']}%)\n ";
 	echo "Количество с неопределенным полом: {$genderDistribution['неопределенный']} ({$genderDistribution['неопределенные_доля']}%)\n ";
 
+
+//Самая сложная часть. Мы пишем функцию getPerfectPartner, которая случайным образом выбирает партнера из массива и проверяет его пол
 function getPerfectPartner($surname, $name, $patronymic, $persons) {
+	//Выполняем приведение к регистру
 	$surname = mb_convert_case($surname, MB_CASE_TITLE_SIMPLE);
 	$name = mb_convert_case($name, MB_CASE_TITLE_SIMPLE);
 	$patronymic = mb_convert_case($patronymic, MB_CASE_TITLE_SIMPLE);
+	//Собираем имя
 	$fullname = getFullnameFromParts($surname, $name, $patronymic);
 
+	//Прописываем условие для персон, пол которых не определяется скриптом
 	$initialGender = getGenderFromName($fullname);
 	if ($initialGender === 0) {
 		echo "\nНевозможно подобрать пару, так как пол $name неизвестен.\n";
 		return;
-	}
-	
+	} 
+
+	//Условие на случай пустого массива
 	if (empty($persons)) {
 		echo "Нет доступных кандидатов.\n";
 		return;
 	}
-	
+
+	//Если пол совпадает, выбирается другой
 	$partnerFound = false;
 	while (!$partnerFound) {
 		$partner = $persons[array_rand($persons)];

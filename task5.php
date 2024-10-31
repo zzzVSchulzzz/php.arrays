@@ -81,7 +81,7 @@ foreach($example_persons_array as $person) {
 
 // Функция формирования сокращенного имени
 function getShortName($name, $surname){
- return "{$name}" . " " . mb_substr($surname, 0, 1) . ".";
+ return "{$name} " . mb_substr($surname, 0, 1) . ".";
 };
 
 //Перебираем массив
@@ -111,7 +111,7 @@ function getGenderFromName($fullname){
 		$genderScore--;
 	}
 	
-	if (mb_substr($parts['name'], -1) === "а"){
+	if (mb_substr($parts['name'], -1) === "а" || mb_substr($parts['name'], -1) === "я"){
 		$genderScore--;
 	}
 	
@@ -213,30 +213,40 @@ function getPerfectPartner($surname, $name, $patronymic, $persons) {
 	$fullname = getFullnameFromParts($surname, $name, $patronymic);
 
 	$initialGender = getGenderFromName($fullname);
-
 	if ($initialGender === 0) {
-		echo "Невозможно подобрать пару, так как пол $name неизвестен.";
+		echo "\nНевозможно подобрать пару, так как пол $name неизвестен.\n";
 		return;
 	}
-
-	$partner = $persons[array_rand($example_persons_array)];
-	$partnerGender = getGenderFromName($partner["fullname"]);
-
-	while (($partnerGender === $initialGender) || ($partnerGender === 0)) {
-		$partner = $persons[array_rand($example_persons_array)];
-		$partnerGender = getGenderFromName($partner["fullname"]);
+	
+	if (empty($persons)) {
+		echo "Нет доступных кандидатов.\n";
+		return;
+	}
+	
+	$partnerFound = false;
+	while (!$partnerFound) {
+		$partner = $persons[array_rand($persons)];
+		$partnerGender = getGenderFromName($partner['fullname']);
+		
+		if ($partnerGender !==$initialGender && $partnerGender !== 0) {
+			$partnerFound = true;
+		}
 	}
 
+	// Выбираем рандомный % совместимости
+	$perfectPercent = strval(rand(50, 100)).'.'. strval(rand(0, 9)) . strval(rand(0, 9)) .'%';
 
-	// Select a random percent of ideal partner
-	$perfectPercent = strval(rand(50, 100)).'.'
-					  .strval(rand(0, 9))
-					  .strval(rand(0, 9)).'%';
-
-	$perfectPartner = getPerfectPartner($example_persons_array);
-	$initShortName = getShortName($fullname);
-	$partnerShortName = getShortName($partner["fullname"]);
-	echo "$initShortName + $partnerShortName = ♡ Идеально на $perfectPercent ♡";
+	$parts = getPartsFromFullname($fullname);
+	$partnerParts = getPartsFromFullname($partner["fullname"]);
+	
+	$initShortName = getShortName($parts['name'], $parts['surname']);
+	$partnerShortName = getShortName($partnerParts['name'], $partnerParts['surname']);
+	echo "\n$initShortName + $partnerShortName = ♡ Идеально на $perfectPercent ♡\n";
 };
+
+foreach ($example_persons_array as $person) {
+	$parts = getPartsFromFullname($person['fullname']);
+	getPerfectPartner($parts['surname'], $parts['name'], $parts['patronymic'], $example_persons_array);
+}
 
 ?>
